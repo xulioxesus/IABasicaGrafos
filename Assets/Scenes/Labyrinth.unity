@@ -449,22 +449,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 497994718}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 316513611174a504db5c73ba2df20328, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d7ee602653ed9d4e89cc8865327a86f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WalkWaypoints
-  path:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  speed: 4
-  accuracy: 0.5
-  rotationSpeed: 4
-  currentNode: 3
+  m_EditorClassIdentifier: Assembly-CSharp::GridWaypoints
+  prefabWaypoint: {fileID: 4628662164570148421, guid: 9ff2efc144d6509408daad04ca01427d, type: 3}
+  goalMat: {fileID: 2100000, guid: d6e015e897775d147a4d5b007e867025, type: 2}
+  wallMat: {fileID: 2100000, guid: 6e0a807f6217b41479421706fff94a26, type: 2}
 --- !u!1 &858597776
 GameObject:
   m_ObjectHideFlags: 0
