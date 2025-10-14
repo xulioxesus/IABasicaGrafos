@@ -15,7 +15,7 @@ public struct Link {
     public direction dir;
 }
 
-public class WPManager : MonoBehaviour {
+public class TanksWaypointsManager : MonoBehaviour {
 
     public GameObject[] waypoints;
     public Link[] links;

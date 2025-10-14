@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowWP : MonoBehaviour {
+public class TanksRacingFollowWaypoints : MonoBehaviour {
 
     public GameObject[] waypoints;
     int currentWP = 0;

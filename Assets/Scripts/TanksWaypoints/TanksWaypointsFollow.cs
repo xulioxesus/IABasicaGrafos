@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Clase que permite a un obxecto seguir unha ruta de waypoints usando A*
-public class FollowWaypoints : MonoBehaviour {
+public class TanksWaypointsFollow : MonoBehaviour {
 
     // Obxectivo actual ao que se dirixe
     Transform goal;
@@ -30,9 +30,9 @@ public class FollowWaypoints : MonoBehaviour {
         // Acelerar o tempo de simulación
         Time.timeScale = 5.0f;
         // Obter waypoints do manager
-        wps = wpManager.GetComponent<WPManager>().waypoints;
+        wps = wpManager.GetComponent<TanksWaypointsManager>().waypoints;
         // Obter referencia ao grafo
-        g = wpManager.GetComponent<WPManager>().graph;
+        g = wpManager.GetComponent<TanksWaypointsManager>().graph;
         // Establecer nodo inicial
         currentNode = wps[0];
 
