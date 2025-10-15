@@ -1,61 +1,72 @@
 using UnityEngine;
 
-// Clase que permite a un obxecto moverse seguindo unha serie de puntos de paso (waypoints)
-// O obxecto moverase de forma cíclica entre todos os puntos definidos no array
+// Sistema de navegación secuencial que move un obxecto seguindo waypoints de forma cíclica
+// O obxecto move-se automaticamente entre os puntos definidos no array, voltando ao primeiro ao rematar
 public class WalkWaypoints : MonoBehaviour
 {
-    // Array de GameObjects que definen o camiño que debe seguir o obxecto
+    // =============================================================================
+    // CONFIGURACIÓN DE RUTA E NAVEGACIÓN
+    // =============================================================================
+    
+    // Array de GameObjects que definen o camiño a seguir
+    // A orde no array determina a secuencia de movemento
     public GameObject[] path;
     
-    // Posición obxectivo actual cara á que se está movendo o obxecto
+    // Posición obxectivo actual (mantén Y do obxecto, toma X e Z do waypoint)
     private Vector3 goal;
     
-    // Velocidade de movemento do obxecto en unidades por segundo
+    // =============================================================================
+    // PARÁMETROS DE MOVEMENTO
+    // =============================================================================
+    
+    // Velocidade de movemento en unidades por segundo
     public float speed = 4.0f;
     
-    // Distancia mínima para considerar que se alcanzou un punto de paso
+    // Distancia mínima para considerar alcanzado un waypoint
     public float accuracy = 0.5f;
     
-    // Velocidade de rotación do obxecto ao xirar cara ao seguinte punto
+    // Velocidade de rotación cara á nova dirección
     public float rotationSpeed = 4f;
     
-    // Índice do punto de paso actual no array 'path'
+    // Índice do waypoint actual no array (0 = primeiro waypoint)
     public int currentNode = 0;
 
+    // =============================================================================
+    // LÓXICA PRINCIPAL DE NAVEGACIÓN
+    // =============================================================================
 
-    // Método que se executa en cada frame do xogo
-    // Controla o movemento e rotación do obxecto cara aos puntos de paso
+    // Controla o movemento secuencial entre waypoints
+    // Executa navegación cíclica automática
     void Update()
     {
-        // Establece o obxectivo actual mantendo a altura Y do obxecto
-        // e tomando as coordenadas X e Z do punto de paso actual
+        // Establecer obxectivo mantendo altura Y actual
         goal = new Vector3( path[currentNode].transform.position.x,
                             this.transform.position.y,
                             path[currentNode].transform.position.z);
 
-        // Calcula a dirección desde a posición actual cara ao obxectivo
+        // Calcular dirección cara ao obxectivo
         Vector3 direction = goal - this.transform.position;
 
-        // Se a distancia ao obxectivo é maior que a precisión establecida
+        // Se aínda non chegou ao waypoint
         if (direction.magnitude > accuracy)
         {
-            // Rota gradualmente o obxecto para mirar cara á dirección do obxectivo
+            // Rotar suavemente cara á dirección obxectivo
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation,
                                                         Quaternion.LookRotation(direction),
                                                         Time.deltaTime * rotationSpeed);
-            // Move o obxecto cara adiante na súa dirección actual
+            // Mover cara adiante
             this.transform.Translate(0, 0, speed * Time.deltaTime);
         }
         else
         {
-            // Se chegou ao punto actual, pasa ao seguinte
+            // Avanzar ao seguinte waypoint (navegación cíclica)
             if (currentNode < path.Length - 1)
             {
-                currentNode++; // Avanza ao seguinte punto
+                currentNode++; // Seguinte waypoint
             }
             else
             {
-                currentNode = 0; // Volta ao primeiro punto (movemento cíclico)
+                currentNode = 0; // Volta ao primeiro (ciclo)
             }
         }
     }
