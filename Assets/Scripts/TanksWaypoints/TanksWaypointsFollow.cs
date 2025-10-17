@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Seguidor de rutas baseado en waypoints usando A* para calcular camiños
-// Os métodos GotoX chamarrán o AStar no grafo para poboar `g.pathList` e logo o obxecto
+// Os métodos GotoX chamarrán o AStar no grafo para poboar `graph.pathList` e logo o obxecto
 // moverase seguindo eses puntos en LateUpdate.
 public class TanksWaypointsFollow : MonoBehaviour {
 
@@ -14,13 +14,13 @@ public class TanksWaypointsFollow : MonoBehaviour {
     Transform goal;
 
     // Array de waypoints (obtido desde o manager)
-    GameObject[] wps;
+    GameObject[] waypoints;
 
     // Nodo/waypoint actual no que se atopa (GameObject)
     GameObject currentNode;
 
     // Referencia ao grafo que contén rutas e a lista de puntos calculados
-    Graph g;
+    Graph graph;
 
     // Manager que contén os waypoints (debe ter TanksWaypointsManager)
     public GameObject wpManager;
@@ -35,7 +35,7 @@ public class TanksWaypointsFollow : MonoBehaviour {
     // Velocidade de rotación (suavizado)
     float rotSpeed = 2.0f;
 
-    // Índice do waypoint actual na ruta (posición dentro de g.pathList)
+    // Índice do waypoint actual na ruta (posición dentro de graph.pathList)
     int currentWP = 0;
 
     // =============================================================================
@@ -47,13 +47,13 @@ public class TanksWaypointsFollow : MonoBehaviour {
         Time.timeScale = 5.0f;
 
         // Obter array de waypoints do manager
-        wps = wpManager.GetComponent<TanksWaypointsManager>().waypoints;
+        waypoints = wpManager.GetComponent<TanksWaypointsManager>().waypoints;
 
         // Obter referencia ao grafo definido no manager
-        g = wpManager.GetComponent<TanksWaypointsManager>().graph;
+        graph = wpManager.GetComponent<TanksWaypointsManager>().graph;
 
         // Establecer nodo/waypoint inicial (o primeiro do array)
-        currentNode = wps[0];
+        currentNode = waypoints[0];
 
         // Exemplo de invocación retardada a un destino
         // Invoke("GotoRuin", 2.0f);
@@ -68,51 +68,51 @@ public class TanksWaypointsFollow : MonoBehaviour {
 
     // Ir ao helicóptero (waypoint 0)
     public void GotoHeli() {
-        g.AStar(currentNode, wps[0]);
+        graph.AStar(currentNode, waypoints[0]);
         currentWP = 0;
     }
 
     // Ir ás ruínas (waypoint 7)
     public void GotoRuin() {
-        g.AStar(currentNode, wps[7]);
+        graph.AStar(currentNode, waypoints[7]);
         currentWP = 0;
     }
 
     // Ir á rocha (waypoint 1)
     public void GotoRock() {
-        g.AStar(currentNode, wps[1]);
+        graph.AStar(currentNode, waypoints[1]);
         currentWP = 0;
     }
 
     // Ir á fábrica (waypoint 4)
     public void GotoFactory() {
-        g.AStar(currentNode, wps[4]);
+        graph.AStar(currentNode, waypoints[4]);
         currentWP = 0;
     }
 
     // =============================================================================
     // BUCLE DE MOVEMENTO (LateUpdate)
     // =============================================================================
-    // LateUpdate move o obxecto seguindo os puntos xerados por A* (g.pathList).
+    // LateUpdate move o obxecto seguindo os puntos xerados por A* (graph.pathList).
     // Compróbase a distancia ao punto actual; se se alcanza, avanzamos ao seguinte.
     void LateUpdate() {
 
         // Se non hai ruta calculada ou xerstamos o final da ruta, saímos
-        if (g.pathList.Count == 0 || currentWP == g.pathList.Count) return;
+        if (graph.pathList.Count == 0 || currentWP == graph.pathList.Count) return;
 
         // Actualizar nodo actual segundo o índice da ruta
-        currentNode = g.getPathPoint(currentWP);
+        currentNode = graph.getPathPoint(currentWP);
 
         // Se estamos preto do waypoint actual, avanzar ao seguinte
-        if (Vector3.Distance(g.pathList[currentWP].getID().transform.position, transform.position) < accuracy) {
+        if (Vector3.Distance(graph.pathList[currentWP].getID().transform.position, transform.position) < accuracy) {
             currentWP++;
         }
 
         // Se aínda hai puntos por visitar na ruta
-        if (currentWP < g.pathList.Count) {
+        if (currentWP < graph.pathList.Count) {
 
             // Establecer obxectivo actual como o transform do waypoint
-            goal = g.pathList[currentWP].getID().transform;
+            goal = graph.pathList[currentWP].getID().transform;
 
             // Calcular posición á que mirar mantendo a altura (Y) actual
             Vector3 lookAtGoal = new Vector3(
